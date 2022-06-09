@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql
+    environment:
+      - "MYSQL_DATABASE=final_project"
+      - "MYSQL_USER=user"
+      - "MYSQL_PASSWORD=user"
+      - "MYSQL_ROOT_PASSWORD=root"
+    ports:
+      - "127.0.0.1:3307:3306"
+    volumes:
+      - C:/Users/Lenovo/Downloads/webservices(order_management)/webservices-order_management/data/mysql:/var/lib/mysql
+  app:
+    image: 'rest-api:latest'
+    build: . .
+    container_name: rest-api
+    depends_on:
+      - mysql
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/final_project?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SERVER_PORT=8081
+    ports:
+      - "127.0.0.1:8082:8081"
